@@ -1,0 +1,644 @@
+%APNAMES 0.2 #Defining the prefixes of AP names in SJTU. @COPYRIGHT OMNILAB
+---
+apprefix_sjtu:
+  BBY:
+    dsp: 标本园
+    typ: SocBldg
+    usr: PUB
+  BYGTSG:
+    dsp: 包玉刚图书馆
+    typ: LibBldg
+    usr: PUB
+  CL-A:
+    dsp: 材料A楼
+    typ: AcadBldg
+    usr: MATR
+  CL-B:
+    dsp: 材料B楼
+    typ: AcadBldg
+    usr: MATR
+  CL-C:
+    dsp: 材料C楼
+    typ: AcadBldg
+    usr: MATR
+  CL-D:
+    dsp: 材料D楼
+    typ: AcadBldg
+    usr: MATR
+  CL-E:
+    dsp: 材料E楼
+    typ: AcadBldg
+    usr: MATR
+  CL-F:
+    dsp: 材料F楼
+    typ: AcadBldg
+    usr: MATR
+  SXL:
+    dsp: 数学楼
+    typ: AcadBldg
+    usr: MATH
+  WLL:
+    dsp: 物理楼
+    typ: AcadBldg
+    usr: PHY
+  WLSYL:
+    dsp: 物理实验楼
+    typ: AcadBldg
+    usr: PHY
+  GCLXSYZX:
+    dsp: 工程力学实验中心
+    typ: AcadBldg
+    usr: PHY
+  STHJCLYJS:
+    dsp: 生态与环境材料研究所
+    typ: AcadBldg
+    usr: ENV
+  GCXLZX-SYL:
+    dsp: 工程训练中心-思源楼
+    typ: AcadBldg
+    usr: PUB
+  GCXLZX-B:
+    dsp: 工程训练中心-B楼
+    typ: AcadBldg
+    usr: PUB
+  HJKXL:
+    dsp: 环境科学楼
+    typ: AcadBldg
+    usr: ENV
+  HX-A:
+    dsp: 化学楼A
+    typ: AcadBldg
+    usr: CHEM
+  WXYXL:
+    dsp: 文选医学楼
+    typ: AcadBldg
+    usr: MED
+  YXL-1:
+    dsp: 药学楼1号楼
+    typ: AcadBldg
+    usr: PHAR
+  YXL-2:
+    dsp: 药学楼2号楼
+    typ: AcadBldg
+    usr: PHAR
+  YXL-3:
+    dsp: 药学楼3号楼
+    typ: AcadBldg
+    usr: PHAR
+  YXL-4:
+    dsp: 药学楼4号楼
+    typ: AcadBldg
+    usr: PHAR
+  YXL-5:
+    dsp: 药学楼5号楼
+    typ: AcadBldg
+    usr: PHAR
+  YXL-6:
+    dsp: 药学楼6号楼
+    typ: AcadBldg
+    usr: PHAR
+  YXL-7:
+    dsp: 药学楼7号楼
+    typ: AcadBldg
+    usr: PHAR
+  FXCSZX:
+    dsp: 分析测试中心
+    typ: AcadBldg
+    usr: PUB
+  FXCSZX-1:
+    dsp: 分析测试中心1号楼
+    typ: AcadBldg
+    usr: PUB
+  FXCSZX-2:
+    dsp: 分析测试中心2号楼
+    typ: AcadBldg
+    usr: PUB
+  FXCSZX-3:
+    dsp: 分析测试中心3号楼
+    typ: AcadBldg
+    usr: PUB
+  JXDLXY:
+    dsp: 机械与动力工程学院
+    typ: AcadBldg
+    usr: ME
+  JXDLXY-A-Z:
+    dsp: 机械与动力工程学院A楼－主楼
+    typ: AcadBldg
+    usr: ME
+  JXDLXY-A-F:
+    dsp: 机械与动力工程学院A楼－附楼
+    typ: AcadBldg
+    usr: ME
+  JXDLXY-B-N:
+    dsp: 机械与动力工程学院B楼－北楼
+    typ: AcadBldg
+    usr: ME
+  JXDLXY-B-E:
+    dsp: 机械与动力工程学院B楼－东楼
+    typ: AcadBldg
+    usr: ME
+  JXDLXY-B-S:
+    dsp: 机械与动力工程学院B楼－南楼
+    typ: AcadBldg
+    usr: ME
+  JXDLXY-C:
+    dsp: 机械与动力工程学院C楼－附楼
+    typ: AcadBldg
+    usr: ME
+  WDZXY:
+    dsp: 微电子学院
+    typ: AcadBldg
+    usr: IC
+  NXSWXY:
+    dsp: 农学生物学院
+    typ: AcadBldg
+    usr: ARGI
+  NXSWXY-F1:
+    dsp: 农学生物学院-附楼一
+    typ: AcadBldg
+    usr: ARGI
+  NXSWXY-F2:
+    dsp: 农学生物学院-附楼二
+    typ: AcadBldg
+    usr: ARGI
+  NXSWXY-F3:
+    dsp: 农学生物学院-附楼三
+    typ: AcadBldg
+    usr: ARGI
+  XTSWYJY:
+    dsp: 系统生物研究院
+    typ: AcadBldg
+    usr: SCSB
+  XTSWYJY-A:
+    dsp: 系统生物研究院A区
+    typ: AcadBldg
+    usr: SCSB
+  XTSWYJY-B:
+    dsp: 系统生物研究院B区
+    typ: AcadBldg
+    usr: SCSB
+  XTSWYJY-C:
+    dsp: 系统生物研究院C区
+    typ: AcadBldg
+    usr: SCSB
+  XTSWYJY-D:
+    dsp: 系统生物研究院D区
+    typ: AcadBldg
+    usr: SCSB
+  MLXY:
+    dsp: 木兰学院
+    typ: AcadBldg
+    usr: NAOCE
+  MLXY-S:
+    dsp: 木兰学院南楼
+    typ: AcadBldg
+    usr: NAOCE
+  MLXY-N:
+    dsp: 木兰学院北楼
+    typ: AcadBldg
+    usr: NAOCE
+  KYFXY:
+    dsp: 凯原法学院
+    typ: AcadBldg
+    usr: LAW
+  MTSJSYL:
+    dsp: 媒体与设计实验室
+    typ: AcadBldg
+    usr: MEDIA
+  MTSJSYL-A:
+    dsp: 媒体与设计实验室A楼
+    typ: AcadBldg
+    usr: MEDIA
+  MTSJSYL-B:
+    dsp: 媒体与设计实验室B楼
+    typ: AcadBldg
+    usr: MEDIA
+  WYL:
+    dsp: 外语楼
+    typ: AcadBldg
+    usr: FRLAN
+  RWL:
+    dsp: 人文楼
+    typ: AcadBldg
+    usr: SS
+  DXQL:
+    dsp: 电信群楼
+    typ: AcadBldg
+    usr: SEIEE
+  DXQL-1:
+    dsp: 电信群楼1号楼
+    typ: AcadBldg
+    usr: SEIEE
+  DXQL-2:
+    dsp: 电信群楼2号楼
+    typ: AcadBldg
+    usr: SEIEE
+  DXQL-3:
+    dsp: 电信群楼3号楼
+    typ: AcadBldg
+    usr: SEIEE
+  DXQL-4-N:
+    dsp: 电信群楼4号楼北楼
+    typ: AcadBldg
+    usr: SEIEE
+  DXQL-4-S:
+    dsp: 电信群楼4号楼南楼
+    typ: AcadBldg
+    usr: SEIEE
+  DXQL-5:
+    dsp: 电信群楼5号楼
+    typ: AcadBldg
+    usr: SEIEE
+  DXQL-LianLang:
+    dsp: 电信群楼3F连廊
+    typ: AcadBldg
+    usr: SEIEE
+  LLDCYJS:
+    dsp: 燃料电池研究所
+    typ: AcadBldg
+    usr: PHY
+  JZG:
+    dsp: 建筑馆
+    typ: AcadBldg
+    usr: ARCH
+  ZYXY:
+    dsp: 志远学院
+    typ: AcadBldg
+    usr: ZHIYUAN
+  ZYNYL:
+    dsp: 中意能源楼
+    typ: AcadBldg
+    usr: PHY
+  WLXXZX:
+    dsp: 网络信息中心
+    typ: AdmBldg
+    usr: PUB
+  CRQ:
+    dsp: 陈瑞球楼
+    typ: AdmBldg
+    usr: PUB
+  CRQ-N:
+    dsp: 陈瑞球北楼
+    typ: AdmBldg
+    usr: PUB
+  CRQ-S:
+    dsp: 陈瑞球南楼
+    typ: AdmBldg
+    usr: PUB
+  LXZL:
+    dsp: 老行政楼
+    typ: AdmBldg
+    usr: PUB
+  XXZL:
+    dsp: 新行政楼
+    typ: AdmBldg
+    usr: PUB
+  XXZL-B:
+    dsp: 新行政楼B楼
+    typ: AdmBldg
+    usr: PUB
+  XXZL-A:
+    dsp: 新行政楼A楼
+    typ: AdmBldg
+    usr: PUB
+  LWLZX:
+    dsp: 闵行老网络中心
+    typ: AdmBldg
+    usr: PUB
+  XNTYG:
+    dsp: 西南体育馆-南体
+    typ: AthlBldg
+    usr: PUB
+  XTYG:
+    dsp: 新体育馆-近沧源路
+    typ: AthlBldg
+    usr: PUB
+  BQC:
+    dsp: 棒球场
+    typ: AthlBldg
+    usr: PUB
+  DYST:
+    dsp: 第一食堂
+    typ: CantBldg
+    usr: PUB
+  DEST:
+    dsp: 第二食堂
+    typ: CantBldg
+    usr: PUB
+  D3ST:
+    dsp: 第三食堂
+    typ: CantBldg
+    usr: PUB
+  DSST:
+    dsp: 第四食堂
+    typ: CantBldg
+    usr: PUB
+  DWST:
+    dsp: 第五食堂
+    typ: CantBldg
+    usr: PUB
+  LiuYuan:
+    dsp: 留园
+    typ: CantBldg
+    usr: PUB
+  HLGC:
+    dsp: 哈乐小吃广场
+    typ: CantBldg
+    usr: PUB
+  XYY:
+    dsp: 校医院
+    typ: HospBldg
+    usr: PUB
+  XYY-N:
+    dsp: 校医院北楼
+    typ: HospBldg
+    usr: PUB
+  XYY-S:
+    dsp: 校医院南楼
+    typ: HospBldg
+    usr: PUB
+  TSG:
+    dsp: 图书馆
+    typ: LibBldg
+    usr: PUB
+  TSG-1:
+    dsp: 图书馆一区
+    typ: LibBldg
+    usr: PUB
+  TSG-2:
+    dsp: 图书馆二区
+    typ: LibBldg
+    usr: PUB
+  TSG-3:
+    dsp: 图书馆三区
+    typ: LibBldg
+    usr: PUB
+  TSG-4:
+    dsp: 图书馆四区
+    typ: LibBldg
+    usr: PUB
+  JJT:
+    dsp: 菁菁堂
+    typ: SocBldg
+    usr: PUB
+  CJMSG:
+    dsp: 程及美术馆
+    typ: SocBldg
+    usr: PUB
+  XSSWZX:
+    dsp: 学生事务中心-铁生馆
+    typ: SocBldg
+    usr: PUB
+  GBL:
+    dsp: 光彪楼
+    typ: SocBldg
+    usr: PUB
+  YFKJL:
+    dsp: 逸夫科技楼
+    typ: SocBldg
+    usr: PUB
+  XSFWZX:
+    dsp: 学生服务中心
+    typ: SocBldg
+    usr: PUB
+  JJC:
+    dsp: 基建处
+    typ: SuppBldg
+    usr: PUB
+  DHZJF:
+    dsp: 电话总机房
+    typ: SuppBldg
+    usr: PUB
+  MHHCS:
+    dsp: 闵行候车室
+    typ: SuppBldg
+    usr: PUB
+  XSY:
+    dsp: 西上院
+    typ: TeachBldg
+    usr: PUB
+  XZY:
+    dsp: 西中院
+    typ: TeachBldg
+    usr: PUB
+  XXY:
+    dsp: 西下院
+    typ: TeachBldg
+    usr: PUB
+  DSY:
+    dsp: 东上院
+    typ: TeachBldg
+    usr: PUB
+  DZY:
+    dsp: 东中院
+    typ: TeachBldg
+    usr: PUB
+  DZY-1:
+    dsp: 东中院一区
+    typ: TeachBldg
+    usr: PUB
+  DZY-2:
+    dsp: 东中院二区
+    typ: TeachBldg
+    usr: PUB
+  DZY-3:
+    dsp: 东中院三区
+    typ: TeachBldg
+    usr: PUB
+  DZY-4:
+    dsp: 东中院四区
+    typ: TeachBldg
+    usr: PUB
+  DXY:
+    dsp: 东下院
+    typ: TeachBldg
+    usr: PUB
+  XSSS:
+    dsp: 学生宿舍
+    typ: DormBldg
+    usr: PRVT
+  XSSS-E:
+    dsp: 学生宿舍东区
+    typ: DormBldg
+    usr: PRVT
+  XSSS-W:
+    dsp: 学生宿舍西区
+    typ: DormBldg
+    usr: PRVT
+  XSSS-S:
+    dsp: 学生宿舍南区
+    typ: DormBldg
+    usr: PRVT
+  XSSS-N:
+    dsp: 学生宿舍北区
+    typ: DormBldg
+    usr: PRVT
+  student-D:
+    dsp: 学生宿舍D
+    typ: DormBldg
+    usr: PRVT
+  student-X:
+    dsp: 学生宿舍X
+    typ: DormBldg
+    usr: PRVT
+  student-W:
+    dsp: 学生宿舍W
+    typ: DormBldg
+    usr: PRVT
+  student:
+    dsp: 学生宿舍
+    typ: DormBldg
+    usr: PRVT
+  southdoor:
+    dsp: 凯旋门-待定
+    typ: GateBldg
+    usr: PUB
+  XH-XJL:
+    dsp: 徐汇新建楼
+    typ: AcadBldg
+    usr: SIPA
+  XH-XYY:
+    dsp: 徐汇校医院
+    typ: HospBldg
+    usr: PUB
+  XH-XBL:
+    dsp: 徐汇小白楼
+    typ: AcadBldg
+    usr: EBIO
+  XH-FXL:
+    dsp: 徐汇法学楼
+    typ: AcadBldg
+    usr: LAW
+  XH-ZY:
+    dsp: 徐汇中院
+    typ: TeachBldg
+    usr: PUB
+  XH-HRDS:
+    dsp: 徐汇浩然大厦
+    typ: AdmBldg
+    usr: PUB
+  XH-JGHDZX:
+    dsp: 徐汇教工活动中心
+    typ: SocBldg
+    usr: PUB
+  XH-XZY:
+    dsp: 徐汇新中院
+    typ: TeachBldg
+    usr: PUB
+  XH-GCG:
+    dsp: 徐汇工程馆
+    typ: AcadBldg
+    usr: PUB
+  XH-TSG:
+    dsp: 徐汇图书馆
+    typ: LibBldg
+    usr: PUB
+  XH-XINSY:
+    dsp: 徐汇新上院
+    typ: TeachBldg
+    usr: PUB
+  XH-TYG:
+    dsp: 徐汇体育馆
+    typ: AthlBldg
+    usr: PUB
+  XH-ZBGT:
+    dsp: 徐汇总办公厅
+    typ: AdmBldg
+    usr: PUB
+  XH-BWC:
+    dsp: 徐汇保卫处
+    typ: AdmBldg
+    usr: PUB
+  HX-LTSG:
+    dsp: 徐汇老图书馆
+    typ: LibBldg
+    usr: PUB
+  HX-GCG:
+    dsp: 徐汇工程馆
+    typ: AcadBldg
+    usr: PUB
+  HX-HRDS:
+    dsp: 徐汇浩然大厦
+    typ: AdmBldg
+    usr: PUB
+  FH-ATL:
+    dsp: 法华安泰综合楼
+    typ: AcadBldg
+    usr: MNG
+  FH-BL:
+    dsp: 法华北楼
+    typ: AdmBldg
+    usr: PUB
+  FH-NL:
+    dsp: 法华南楼
+    typ: AdmBldg
+    usr: PUB
+  FH-1:
+    dsp: 法华1号楼
+    typ: N/A
+    usr: N/A
+  FH-2:
+    dsp: 法华2号楼
+    typ: N/A
+    usr: N/A
+  FH-3:
+    dsp: 法华3号楼
+    typ: N/A
+    usr: N/A
+  FH-4:
+    dsp: 法华4号楼
+    typ: N/A
+    usr: N/A
+  FH-5:
+    dsp: 法华5号楼
+    typ: N/A
+    usr: N/A
+  FH-6:
+    dsp: 法华6号楼
+    typ: N/A
+    usr: N/A
+  FH-7:
+    dsp: 法华7号楼
+    typ: N/A
+    usr: N/A
+  FH-8:
+    dsp: 法华8号楼
+    typ: N/A
+    usr: N/A
+  FH-9:
+    dsp: 法华9号楼
+    typ: N/A
+    usr: N/A
+  FH-10:
+    dsp: 法华10号楼
+    typ: N/A
+    usr: N/A
+  QB-WLZX:
+    dsp: 七宝网络中心
+    typ: AdmBldg
+    usr: PUB
+  6c:
+    dsp: 第六食堂-待定
+    typ: CantBldg
+    usr: PUB
+  CLAL:
+    dsp: 材料A楼
+    typ: AcadBldg
+    usr: MATR
+  NYCL:
+    dsp: 能源材料
+    typ: AcadBldg
+    usr: MATR
+  WWQT:
+    dsp: 伍威权堂
+    typ: SocBldg
+    usr: PUB
+  TEST:
+    dsp: 测试点
+    typ: N/A
+    usr: N/A
+  test:
+    dsp: 测试点
+    typ: N/A
+    usr: N/A
+...
