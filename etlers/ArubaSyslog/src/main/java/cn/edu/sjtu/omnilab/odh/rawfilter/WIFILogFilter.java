@@ -31,6 +31,9 @@ import java.util.regex.Pattern;
  * Local4: 1001 111.186.48.1/20, New: 10.187.0.0/16
  * Local5: 1001 111.186.0.1/20, New: 10.184.0.0/16
  *
+ * We also lost year in time for most months of 2013.
+ * This requires fix in the pattern matching.
+ *
  *
  * @Author chenxm, gwj
  */
@@ -56,7 +59,7 @@ public class WIFILogFilter {
         final int[] CODE_USRSTATUS = {522005, 522006, 522026}; // User Entry added, deleted, and user miss
         final int[] CODE_USERROAM = {500010};
 
-        final String regPrefix = "(\\w+\\s+\\d+\\s+(?:\\d{1,2}:){2}\\d{1,2}\\s+\\d{4})";
+        final String regPrefix = "(\\w+\\s+\\d+\\s+(?:\\d{1,2}:){2}\\d{1,2}(?:\\s+\\d{4})?)";
         final String regUserMac = "((?:[0-9a-f]{2}:){5}[0-9a-f]{2})";
         final String regApInfo = "((?:\\d{1,3}\\.){3}\\d{1,3})-((?:[0-9a-f]{2}:){5}[0-9a-f]{2})-([\\w-]+)";
 
@@ -87,6 +90,8 @@ public class WIFILogFilter {
             return cleanLog;
 
         int messageCode = Integer.valueOf(chops[2].split(">", 2)[0]);
+        System.out.println(messageCode);
+
         if (hasCodes(messageCode, CODE_AUTHREQ)) { // Auth request
             Matcher matcher = REG_AUTHREQ.matcher(rawLogEntry);
             if (matcher.find()) {
@@ -97,6 +102,7 @@ public class WIFILogFilter {
             }
         } else if (hasCodes(messageCode, CODE_DEAUTH)) { // Deauth from and to
             Matcher matcher = REG_DEAUTH.matcher(rawLogEntry);
+            System.out.println(matcher.find());
             if (matcher.find()) {
                 String time = formattrans(matcher.group(1));
                 String usermac = matcher.group(2).replaceAll(":", "");
@@ -190,6 +196,7 @@ public class WIFILogFilter {
 
     //This function is used to change the date format from "May 4" to "2013-05-04"
     private static String formattrans(String date_string){
+
         //Prepare for the month name for date changing
         TreeMap<String, String> month_tmap = new TreeMap<String, String>();
         month_tmap.put("Jan", "01");
@@ -207,13 +214,18 @@ public class WIFILogFilter {
 
         //change the date from "May 4" to "2013-05-04"
         // month: group(1), day: group(2), time: group(3), year: group(4)
-        String date_reg = "(\\w+)\\s+(\\d+)\\s+((?:\\d{1,2}:){2}\\d{1,2})\\s+(\\d{4})";
+        String date_reg = "(\\w+)\\s+(\\d+)\\s+((?:\\d{1,2}:){2}\\d{1,2})(?:\\s+(\\d{4}))?";
         Pattern date_pattern = Pattern.compile(date_reg);
         Matcher date_matcher = date_pattern.matcher(date_string);
         if(! date_matcher.find())
             return null;
 
-        String year_string=date_matcher.group(4);
+        String year_string = date_matcher.group(4);
+        if ( year_string == null ) {
+            // We may lose year before 2013
+            year_string = "2013";
+        }
+
         //change the month format
         String month_string = date_matcher.group(1);
         if(month_tmap.containsKey(month_string)){
