@@ -3,8 +3,6 @@ package cn.edu.sjtu.omnilab.odh.spark
 import cn.edu.sjtu.omnilab.odh.rawfilter.{WIFILogFilter}
 import org.apache.spark.{SparkConf, SparkContext}
 
-case class CleanWIFILog(MAC: String, time: Long, code: Int, payload: String) // payload as AP or IP
-
 
 /**
  * Cleanse raw WIFI syslog into movement data.
