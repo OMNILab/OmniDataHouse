@@ -21,8 +21,6 @@ object CleanseWifiLogs {
     val input = args(0)
     val output = args(1)
 
-    println(input)
-
     val conf = new SparkConf()
     conf.setAppName("Cleanse WIFI syslog into movement data")
     val spark = new SparkContext(conf)
