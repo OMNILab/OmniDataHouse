@@ -36,10 +36,6 @@ year=`date -d "yesterday" '+%Y'`
 month=`date -d "yesterday" '+%m'`
 day=`date -d "yesterday" '+%d'`
 
-year=2013
-month=04
-day=23
-
 INPUT=$HDFS_WIFI_SYSLOG/wifilog$year-$month-$day
 OUTPUT=$HDFS_WIFI_SYSLOG_SESSION/wifilog$year-$month-$day
 
