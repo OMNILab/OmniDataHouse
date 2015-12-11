@@ -1,9 +1,5 @@
 #!/bin/bash
 
-function clean_trash () {
-  hadoop fs -rm -r .Trash/Current > /dev/null
-}
-
 function die () {
     echo "${@}"
     exit 1
@@ -23,3 +19,6 @@ exec '$BASEDIR/porters/wifi_syslog.sh'
 
 ## Run WifiSyslogSession extraction
 exec '$BASEDIR/porters/wifi_syslog_session.sh'
+
+## Run WifiTrafficHttp cleansing
+exec '$BASEDIR/porters/wifi_traffic_http.sh'
