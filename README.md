@@ -53,6 +53,8 @@ to add new data sources to Layer0 or Layer1.
 
 * [WifiTrafficHTTP](https://github.com/OMNILab/OmniDataHouse/blob/master/repos/wifi_traffic_http.md)
 
+* [WifiUsers](https://github.com/OMNILab/OmniDataHouse/blob/master/repos/wifi_users.md)
+
 
 ## Instructions to add a new repo.
 
