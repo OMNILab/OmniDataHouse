@@ -23,7 +23,9 @@ to add new data sources to Layer0 or Layer1.
 
 ## Project structure
 
-* `etlers`: ETL tools for each data repo.
+* `etlers`: source code of ETL tools.
+
+* `deploy`: folder to dploy binary ETL tools referred by `porters`.
 
 * `porters`: automatic scripts to port a new repo periodically with ETL tools.
 
@@ -49,7 +51,7 @@ to add new data sources to Layer0 or Layer1.
 
 * [WifiSyslog](https://github.com/OMNILab/OmniDataHouse/blob/master/repos/wifi_syslog.md)
 
-* [WifiTraffic](#)
+* [WifiTrafficHTTP](https://github.com/OMNILab/OmniDataHouse/blob/master/repos/wifi_traffic_http.md)
 
 
 ## Instructions to add a new repo.

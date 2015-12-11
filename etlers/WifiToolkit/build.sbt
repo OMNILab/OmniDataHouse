@@ -1,4 +1,4 @@
-name := "ArubaSyslog"
+name := "WifiToolkit"
 
 version := "1.0"
 

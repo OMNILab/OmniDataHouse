@@ -19,7 +19,7 @@ BASEDIR=$(dirname $0)/..
 source $BASEDIR/global_config.sh
 
 # Cleansing tools
-BINJAR=$BASEDIR/etlers/ArubaSyslog/target/scala-2.10/ArubaSyslog-assembly-1.0.jar
+BINJAR=$BASEDIR/deploy/WifiToolkit-assembly-1.0.jar
 CLSNAME="cn.edu.sjtu.omnilab.odh.spark.CleanseWifiLogs"
 
 # Check root path for raw data

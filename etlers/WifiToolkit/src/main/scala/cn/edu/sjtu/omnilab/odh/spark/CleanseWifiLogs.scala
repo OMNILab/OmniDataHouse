@@ -1,6 +1,7 @@
 package cn.edu.sjtu.omnilab.odh.spark
 
 import cn.edu.sjtu.omnilab.odh.rawfilter.{WIFILogFilter}
+import cn.edu.sjtu.omnilab.odh.utils.Utils
 import org.apache.spark.{SparkConf, SparkContext}
 
 
