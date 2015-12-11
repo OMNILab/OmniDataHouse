@@ -56,9 +56,9 @@ to add new data sources to Layer0 or Layer1.
 
 1. Add a related ETL program or script to `etlers`. Each program deserves an independent folder.
 
-2. Add a shell script to call your ETL program automatically.
+2. Add a shell script in `porters` to call your ETL program automatically.
 
-3. Append the shell script to right position in the workflow.
+3. Append the shell script to right position in `workflow.sh`.
 
 4. Add documentation of the new repo to `repos`.
 
@@ -67,6 +67,6 @@ to add new data sources to Layer0 or Layer1.
 
 ## Contact
 
-* Xiaming Chen <chen_xm@sjtu.edu.cn\>
+* Xiaming Chen, chen_xm@sjtu.edu.cn
 
-* Haiyang Wang <oceanking111@163.com\>
+* Haiyang Wang, oceanking111@163.com
