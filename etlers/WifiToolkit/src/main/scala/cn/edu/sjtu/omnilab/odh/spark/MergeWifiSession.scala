@@ -59,7 +59,7 @@ object MergeWifiSession {
 
       .filter(m => validSessionCodes.contains(m.code))
 
-      .sortBy(_.time).groupBy(_.MAC)
+      .groupBy(_.MAC)
 
       .flatMap { case (key, logs) => { extractSessions(logs) }}
 
@@ -101,57 +101,59 @@ object MergeWifiSession {
     /*
      * Use algorithm iterated from previous GWJ's version of SyslogCleanser project.
      */
-    logs.foreach( log => {
-      /*
-       * construct network sessions roughly
-       * currently, we end a session when AUTH and DEAUTH pair is detected
-       */
-      val mac = log.MAC
-      val time = log.time
-      val code = log.code
-      val ap = log.payload
+    logs.toSeq.sortBy(_.time)
 
-      if ( code == WIFICode.AuthRequest || code == WIFICode.AssocRequest) {
+      .foreach( log => {
+        /*
+         * construct network sessions roughly
+         * currently, we end a session when AUTH and DEAUTH pair is detected
+         */
+        val mac = log.MAC
+        val time = log.time
+        val code = log.code
+        val ap = log.payload
 
-        if ( ! APMap.contains(ap) || (APMap.contains(ap) && ap != preAP))
-          APMap.put(ap, time)
+        if ( code == WIFICode.AuthRequest || code == WIFICode.AssocRequest) {
 
-      } else if (code == WIFICode.Deauth || code == WIFICode.Disassoc) {
+          if ( ! APMap.contains(ap) || (APMap.contains(ap) && ap != preAP))
+            APMap.put(ap, time)
 
-        if ( APMap.contains(ap) ) {
-          // record this new session and remove it from APMap
-          val stime = APMap.get(ap).get
-          curSession = WIFISession(mac, stime, time, ap)
-          APMap.remove(ap)
+        } else if (code == WIFICode.Deauth || code == WIFICode.Disassoc) {
 
-          // adjust session timestamps
-          if ( preSession != null ) {
-            val tdiff = curSession.stime - preSession.etime
-            if (tdiff < 0)
-              preSession = preSession.copy(etime = curSession.stime)
+          if ( APMap.contains(ap) ) {
+            // record this new session and remove it from APMap
+            val stime = APMap.get(ap).get
+            curSession = WIFISession(mac, stime, time, ap)
+            APMap.remove(ap)
 
-            // merge adjacent sessions under the same AP
-            if ( preSession.AP == curSession.AP && tdiff < mergeSessionThreshold )
-              preSession = preSession.copy(etime = curSession.etime)
-            else {
-              sessions = sessions :+ preSession
+            // adjust session timestamps
+            if ( preSession != null ) {
+              val tdiff = curSession.stime - preSession.etime
+              if (tdiff < 0)
+                preSession = preSession.copy(etime = curSession.stime)
+
+              // merge adjacent sessions under the same AP
+              if ( preSession.AP == curSession.AP && tdiff < mergeSessionThreshold )
+                preSession = preSession.copy(etime = curSession.etime)
+              else {
+                sessions = sessions :+ preSession
+                preSession = curSession
+              }
+
+            } else {
               preSession = curSession
             }
-
-          } else {
-            preSession = curSession
           }
         }
-      }
 
-      preAP = ap
+        preAP = ap
 
-    })
+      })
 
     if (preSession != null)
       sessions = sessions :+ preSession
 
-    sessions.toIterable
+    sessions.sortBy(_.stime).toIterable
 
   }
 }
