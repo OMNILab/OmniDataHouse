@@ -1,4 +1,5 @@
 #!/bin/bash
+# Usage: wifi_traffic_http.sh [2015-01-01]
 
 function clean_trash () {
   hadoop fs -rm -r .Trash/Current > /dev/null
@@ -31,17 +32,32 @@ year=`date -d "yesterday" "+%Y"`
 month=`date -d "yesterday" "+%m"`
 day=`date -d "yesterday" "+%d"`
 
-INPUT=$WIFI_TRAFFIC_PATH/$year$month/http/$year$month$day-*.gz
+if [ $1 != "" ]; then
+    year=`echo $1 | cut -d'-' -f1`
+    month=`echo $1 | cut -d'-' -f2`
+    day=`echo $1 | cut -d'-' -f3`
+fi
+
+INPUT=$WIFI_TRAFFIC_PATH/$year$month/http/$year$month$day-*.jn.*
 INPUT_TEMP=$HDFS_WIFI_TRAFFIC/HTTP/_temp
 OUTPUT=$HDFS_WIFI_TRAFFIC/HTTP/$year$month$day
+
+if ! hadoop fs -test -d $INPUT_TEMP; then
+    hadoop fs -mkdir -p $INPUT_TEMP
+fi
 
 # Decompress files
 for rawfile in `ls $INPUT`; do
     echo $rawfile
+    rfext=${rawfile##*.}
     rfname=${rawfile%.*}
 
     if ! hadoop fs -test -e $INPUT_TEMP/`basename $rfname`; then
-        gunzip -c $rawfile | hadoop fs -put - $INPUT_TEMP/`basename $rfname`
+        if [ $rfext == "gz" ]; then
+            gunzip -c $rawfile | hadoop fs -put - $INPUT_TEMP/`basename $rfname`
+        else
+            hadoop fs -put $rawfile $INPUT_TEMP/`basename $rawfile`
+        fi
     fi
 done
 

@@ -1,0 +1,2 @@
+## Start workflow
+00 03 * * * chmod +x workflow.sh && nohup /home/omnilab/OmniDataHouse/workflow.sh

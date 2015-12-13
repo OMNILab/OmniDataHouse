@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Usage:
+#  wifi_syslog.sh [2013-04-25]
 
 function clean_trash () {
   hadoop fs -rm -r .Trash/Current > /dev/null
@@ -37,6 +40,11 @@ TEMPWP=$HDFS_WIFI_SYSLOG/_temp
 hadoop fs -rm -r $TEMPWP
 hadoop fs -mkdir -p $TEMPWP
 
+TARGET=$(date -d "yesterday" '+%Y-%m-%d')
+if [ $1 != "" ]; then
+    TARGET=$1
+fi
+
 # Process yesterday's file
 for rawfile in `ls $WIFI_SYSLOG_PATH`; do
 
@@ -46,20 +54,20 @@ for rawfile in `ls $WIFI_SYSLOG_PATH`; do
     month=`echo $rfname | cut -d "-" -f2`
     day=`echo $rfname | cut -d "-" -f3`
 
-    if [ $year$month$day == $(date -d "yesterday" '+%Y%m%d') ]; then
+    if [ "$year-$month-$day" == $TARGET ]; then
 
-	if ! hadoop fs -test -e $HDFS_WIFI_SYSLOG/$rfname/_SUCCESS; then
+    	if ! hadoop fs -test -e $HDFS_WIFI_SYSLOG/$rfname/_SUCCESS; then
 
-	    # Decompress file
-	    if ! hadoop fs -test -e $TEMPWP/$rfname; then
-		gunzip -c $WIFI_SYSLOG_PATH/$rawfile | hadoop fs -put - $TEMPWP/$rfname
-	    fi
+    	    # Decompress file
+    	    if ! hadoop fs -test -e $TEMPWP/$rfname; then
+    		gunzip -c $WIFI_SYSLOG_PATH/$rawfile | hadoop fs -put - $TEMPWP/$rfname
+    	    fi
 
-	    # Cleanse wifilog
-	    hadoop fs -rm -r $HDFS_WIFI_SYSLOG/$rfname
-	    spark-submit2 --class $CLSNAME $BINJAR $TEMPWP/$rfname $HDFS_WIFI_SYSLOG/$rfname
-	    hadoop fs -rm -r $TEMPWP/$rfname
-	fi
+    	    # Cleanse wifilog
+    	    hadoop fs -rm -r $HDFS_WIFI_SYSLOG/$rfname
+    	    spark-submit2 --class $CLSNAME $BINJAR $TEMPWP/$rfname $HDFS_WIFI_SYSLOG/$rfname
+    	    hadoop fs -rm -r $TEMPWP/$rfname
+    	fi
 
     fi
 

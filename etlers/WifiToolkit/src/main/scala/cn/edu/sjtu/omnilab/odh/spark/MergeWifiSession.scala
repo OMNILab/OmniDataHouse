@@ -48,16 +48,20 @@ object MergeWifiSession {
       .map{ filtered => {
         val parts = filtered.split(',')
 
-        CleanWIFILog(
-          MAC = parts(0),
-          time = parts(1).toLong,
-          code = parts(2).toInt,
-          payload = parts(3)
-        )
+        if (parts.length < 4) {
+          null
+        } else {
 
-    }}
+          CleanWIFILog(
+            MAC = parts(0),
+            time = parts(1).toLong,
+            code = parts(2).toInt,
+            payload = parts(3)
+          )
 
-      .filter(m => validSessionCodes.contains(m.code))
+        }}}
+
+      .filter(m => m != null && validSessionCodes.contains(m.code))
 
       .groupBy(_.MAC)
 

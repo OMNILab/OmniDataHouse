@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Usage:
+#  wifi_syslog_session.sh [2013-04-25]
 
 function clean_trash () {
   hadoop fs -rm -r .Trash/Current > /dev/null
@@ -32,12 +35,13 @@ if ! hadoop fs -test -d $HDFS_WIFI_SYSLOG_SESSION; then
     hadoop fs -mkdir -p $HDFS_WIFI_SYSLOG_SESSION
 fi
 
-year=`date -d "yesterday" '+%Y'`
-month=`date -d "yesterday" '+%m'`
-day=`date -d "yesterday" '+%d'`
+TARGET=$(date -d "yesterday" '+%Y-%m-%d')
+if [ $1 != "" ]; then
+    TARGET=$1
+fi
 
-INPUT=$HDFS_WIFI_SYSLOG/wifilog$year-$month-$day
-OUTPUT=$HDFS_WIFI_SYSLOG_SESSION/wifilog$year-$month-$day
+INPUT=$HDFS_WIFI_SYSLOG/wifilog$TARGET
+OUTPUT=$HDFS_WIFI_SYSLOG_SESSION/wifilog$TARGET
 
 if ! hadoop fs -test -e $OUTPUT/_SUCCESS; then
     hadoop fs -rm -r $OUTPUT

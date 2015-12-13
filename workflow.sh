@@ -11,14 +11,17 @@ if [ `whoami` != 'omnilab' ]; then
 fi
 
 # Global vars
-BASEDIR=$(dirname $0)/..
+BASEDIR=$(dirname $0)
 source $BASEDIR/global_config.sh
 
 ## Run WifiSyslog cleansing
-exec '$BASEDIR/porters/wifi_syslog.sh'
+chmod +x $BASEDIR/porters/wifi_syslog.sh
+source $BASEDIR/porters/wifi_syslog.sh
 
 ## Run WifiSyslogSession extraction
-exec '$BASEDIR/porters/wifi_syslog_session.sh'
+chmod +x $BASEDIR/porters/wifi_syslog_session.sh
+source $BASEDIR/porters/wifi_syslog_session.sh
 
 ## Run WifiTrafficHttp cleansing
-exec '$BASEDIR/porters/wifi_traffic_http.sh'
+chmod +x $BASEDIR/porters/wifi_traffic_http.sh
+source $BASEDIR/porters/wifi_traffic_http.sh
