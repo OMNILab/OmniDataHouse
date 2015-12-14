@@ -30,6 +30,10 @@ This repo contains several sessional mobility features, including:
 
 * `Longitude`: float, the longitude coordinate of specific building.
 
+* `IP address`: string, the allocated IP address for current session.
+
+* `Account`: string, the anonymized account name of user.
+
 
 **Definition of a mobility session**:
 
@@ -40,7 +44,6 @@ Two small sessions with an idle gap of less than 10 seconds are merged into a la
 
 ## Data sample
 
-    78e400111111,1366725353000,1366725354000,TSG-2-2F-02,图书馆二区,LibBldg,Public,31.032837,121.443493
-    00c610222222,1366715995000,1366716052000,BYGTSG-2F-01,图书馆,LibBldg,Public,31.028224,121.436552
-    28e02c633333,1366719817000,1366719817000,LXZL-1F-02,老行政楼,AdmBldg,Public,31.024936,121.437448
-    50ead6c44444,1366723611000,1366715873000,TSG-1-2F-04,图书馆一区,LibBldg,Public,31.03262,121.442788
+    60facd611111,1368532272000,1368532315000,XSY-3F-09,西上院,TeachBldg,Public,31.025927,121.437374,111.186.19.43,LLLLLLLL
+    60facd611111,1368532510000,1368532511000,XSY-2F-09,西上院,TeachBldg,Public,31.025927,121.437374,111.186.19.43,LLLLLLLL
+    60facd611111,1368525160000,1368525417000,BYGTSG-3F-03,包玉刚图书馆,LibBldg,Public,31.028224,121.436552,111.186.15.86,MMMMMMMM
