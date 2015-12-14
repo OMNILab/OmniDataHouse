@@ -41,7 +41,7 @@ hadoop fs -rm -r $TEMPWP
 hadoop fs -mkdir -p $TEMPWP
 
 TARGET=$(date -d "yesterday" '+%Y-%m-%d')
-if [ $1 != "" ]; then
+if [ XXOO$1 != "XXOO" ]; then
     TARGET=$1
 fi
 

@@ -36,7 +36,7 @@ if ! hadoop fs -test -d $HDFS_WIFI_SYSLOG_SESSION; then
 fi
 
 TARGET=$(date -d "yesterday" '+%Y-%m-%d')
-if [ $1 != "" ]; then
+if [ XXOO$1 != "XXOO" ]; then
     TARGET=$1
 fi
 

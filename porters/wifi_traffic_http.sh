@@ -32,7 +32,7 @@ year=`date -d "yesterday" "+%Y"`
 month=`date -d "yesterday" "+%m"`
 day=`date -d "yesterday" "+%d"`
 
-if [ $1 != "" ]; then
+if [ XXOO$1 != "XXOO" ]; then
     year=`echo $1 | cut -d'-' -f1`
     month=`echo $1 | cut -d'-' -f2`
     day=`echo $1 | cut -d'-' -f3`
