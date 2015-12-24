@@ -58,7 +58,7 @@ public class WIFILogFilter {
         final int[] CODE_USERAUTH = {522008, 522042, 522038}; // Successful and failed
         final int[] CODE_USRSTATUS = {522005, 522006, 522026}; // User Entry added, deleted, and user miss
         final int[] CODE_USERROAM = {500010};
-        final int[] CODE_NEW_DEV = {522035};
+        final int[] CODE_NEW_DEV = {522035, 522036};
 
         // Regex for timestamp in e.g. "Dec 14 15:45:05 2015"
         final String regTime = "(\\w+\\s+\\d+\\s+(?:\\d{1,2}:){2}\\d{1,2}(?:\\s+\\d{4})?)";
@@ -114,7 +114,7 @@ public class WIFILogFilter {
                 regTime, regUserMac, regIPAddr, regApName, regRoamInfo));
 
         // time: group(1), usermac: group(2), bssid: group(3), essid: group(4), apname: group(5)
-        final Pattern REG_NEW_DEV = Pattern.compile(String.format("%s(?:.*)MAC=%s Station UP: BSSID=%s ESSID=%s (?:.*)AP-name=%s",
+        final Pattern REG_NEW_DEV = Pattern.compile(String.format("%s(?:.*)MAC=%s Station (?:UP|DN): BSSID=%s ESSID=%s (?:.*)AP-name=%s",
                 regTime, regUserMac, regUserMac, regApName, regApName));
 
 
