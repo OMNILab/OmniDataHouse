@@ -9,4 +9,6 @@ public class WIFICode {
     public static final int UserAuth = 4;
     public static final int IPAllocation = 5;
     public static final int IPRecycle = 6;
+    public static final int UserRoam = 7;
+    public static final int NewDev = 8;
 }
