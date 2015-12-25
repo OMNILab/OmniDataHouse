@@ -1,6 +1,7 @@
 package cn.edu.sjtu.omnilab.odh.spark
 
 import cn.edu.sjtu.omnilab.odh.rawfilter.{APToBuilding, WIFICode}
+import org.apache.commons.lang.StringUtils
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.SparkContext._ // to use join etc.
 
@@ -37,18 +38,28 @@ object MergeWifiSession {
     val inRDD = spark.textFile(input)
 
     // extract sessions
-    val validSessionCodes = List(
+    val mobilityCodes = List(
       WIFICode.AuthRequest,
       WIFICode.AssocRequest,
       WIFICode.Deauth,
-      WIFICode.Disassoc
+      WIFICode.Disassoc,
+      WIFICode.UserRoam,
+      WIFICode.NewDev
+    )
+
+    val ipAllocCodes = List(
+      WIFICode.UserAuth,
+      WIFICode.IPAllocation,
+      WIFICode.IPRecycle,
+      WIFICode.UserRoam
     )
 
     // Load clean Wifi syslog
     val inputRDD = spark.textFile(input)
 
       .map{ filtered => {
-        val parts = filtered.split(',')
+        // NOTE: there are more than four fields for UserAuth and UserRoam
+        val parts = StringUtils.split(filtered, ",", 4)
 
         if (parts.length < 4) {
           null
@@ -65,7 +76,7 @@ object MergeWifiSession {
 
     // Filter IP sessions from input
     val ipSession = inputRDD
-      .filter( m => m.code == WIFICode.IPAllocation || m.code == WIFICode.IPRecycle)
+      .filter( m => ipAllocCodes.contains(m.code))
       .groupBy(_.MAC)
       .flatMap { case (key, logs) => { collectIPSession(logs) }}
       .keyBy(_.MAC)
@@ -76,7 +87,10 @@ object MergeWifiSession {
     // associate to that MAC for the whole day.
     // Otherwise, a session-based association is performed after the join action.
     val authRDD = inputRDD.filter(m => m.code == WIFICode.UserAuth)
-      .map( m => CleanWIFILog(MAC=m.MAC, time=m.time, code=m.code, payload=m.payload))
+      .map( m => {
+        val accname = m.payload.split(',')(0)
+        CleanWIFILog(MAC=m.MAC, time=m.time, code=m.code, payload=accname)
+      })
       .distinct.groupBy(_.MAC)
       .mapValues{ case (authinfos) => {
         var accounts: List[String] = List[String]()
@@ -90,8 +104,9 @@ object MergeWifiSession {
 
     val sessionRDD = inputRDD
       // extract mobility sessions
-      .filter(m => validSessionCodes.contains(m.code)).groupBy(_.MAC)
-      .flatMap { case (key, logs) => { extractSessions(logs) }}
+      .filter(m => mobilityCodes.contains(m.code))
+      .groupBy(_.MAC)
+      .flatMap { case (key, logs) => { extractSessions_ex(logs) }}
 
       // append IP info. to mobility sessions
       .keyBy(_.MAC)
@@ -149,11 +164,11 @@ object MergeWifiSession {
       .map { case (wsession, ipsession, authinfo) =>
         val buildInfo = apToBuild.parse(wsession.AP)
 
-        var bname: String = null
-        var btype: String = null
-        var bschool: String = null
-        var blat: String = null
-        var blon: String = null
+        var bname: String = ""
+        var btype: String = ""
+        var bschool: String = ""
+        var blat: String = ""
+        var blon: String = ""
         if ( buildInfo != null ) {
           bname = buildInfo.get(0)
           btype = buildInfo.get(1)
@@ -162,12 +177,12 @@ object MergeWifiSession {
           blon = buildInfo.get(4)
         }
 
-        var ipaddr: String = null
+        var ipaddr: String = ""
         if ( ipsession != null ) {
           ipaddr = ipsession.IP
         }
 
-        var account: String = null
+        var account: String = ""
         if ( authinfo != null ) {
           account = authinfo.payload
         }
@@ -183,70 +198,76 @@ object MergeWifiSession {
   /**
    * Extract WIFI association sessions from certain individual's logs
    */
-  def extractSessions(logs: Iterable[CleanWIFILog]): Iterable[WIFISession] = {
+  def extractSessions_ex(logs: Iterable[CleanWIFILog]): Iterable[WIFISession] = {
 
-    var sessions = new Array[WIFISession](0)
-    var APMap = new HashMap[String, Long]
-    var preAP: String = null
-    var preSession: WIFISession = null
-    var curSession: WIFISession = null
 
     /*
-     * Use algorithm iterated from previous GWJ's version of SyslogCleanser project.
+     * Based on previous algorithm used in SyslogCleanser project.
      */
-    logs.toSeq.sortBy(_.time)
+    var sessions = new Array[WIFISession](0)
+    var APMap = new HashMap[String, List[Long]]
 
+    logs.toSeq.sortBy(_.time)
       .foreach( log => {
-        /*
-         * construct network sessions roughly
-         * currently, we end a session when AUTH and DEAUTH pair is detected
-         */
+
         val mac = log.MAC
         val time = log.time
         val code = log.code
-        val ap = log.payload
+        val ap = log.payload.split(',')(0)
 
-        if ( code == WIFICode.AuthRequest || code == WIFICode.AssocRequest) {
-
-          if ( ! APMap.contains(ap) || (APMap.contains(ap) && ap != preAP))
-            APMap.put(ap, time)
-
-        } else if (code == WIFICode.Deauth || code == WIFICode.Disassoc) {
-
-          if ( APMap.contains(ap) ) {
-            // record this new session and remove it from APMap
-            val stime = APMap.get(ap).get
-            curSession = WIFISession(mac, stime, time, ap)
-            APMap.remove(ap)
-
-            // adjust session timestamps
-            if ( preSession != null ) {
-              val tdiff = curSession.stime - preSession.etime
-              if (tdiff < 0)
-                preSession = preSession.copy(etime = curSession.stime)
-
-              // merge adjacent sessions under the same AP
-              if ( preSession.AP == curSession.AP && tdiff < mergeSessionThreshold )
-                preSession = preSession.copy(etime = curSession.etime)
-              else {
-                sessions = sessions :+ preSession
-                preSession = curSession
-              }
-
-            } else {
-              preSession = curSession
+        // create ip mapping
+        if ( code == WIFICode.AuthRequest || code == WIFICode.AssocRequest ||
+          code == WIFICode.UserRoam || code == WIFICode.NewDev) {
+          // start a new mobility session with these msgs.
+          if ( ! APMap.contains(ap) )
+            APMap.put(ap, List(time, time))
+          else {
+            val value = APMap.get(ap).get
+            if ( time >= value(1) ) {
+              APMap.put(ap, List(value(0), time))
             }
+          }
+        } else if (code == WIFICode.Deauth || code == WIFICode.Disassoc) {
+          if ( APMap.contains(ap)) {
+            val value = APMap.get(ap).get
+            sessions = sessions :+ WIFISession(mac, value(0), time, ap)
+            APMap.remove(ap)
           }
         }
 
-        preAP = ap
+        APMap.foreach { case (key, value) => {
+          sessions = sessions :+ WIFISession(mac, value(0), value(1), key)
+        }}
 
-      })
+    })
+
+    // adjust session timestamps
+    var preSession: WIFISession = null
+    var ajustedSessions = new Array[WIFISession](0)
+
+    sessions.sortBy(m => m.stime).foreach { m => {
+      if ( preSession != null ) {
+        val tdiff = m.stime - m.etime
+        if (tdiff < 0)
+          preSession = preSession.copy(etime = m.stime)
+
+        // merge adjacent sessions with the same IP
+        if ( preSession.AP == m.AP && tdiff < mergeSessionThreshold )
+          preSession = preSession.copy(etime = m.etime)
+        else {
+          ajustedSessions = ajustedSessions :+ preSession
+          preSession = m
+        }
+      } else {
+        preSession = m
+      }
+
+    }}
 
     if (preSession != null)
-      sessions = sessions :+ preSession
+      ajustedSessions = ajustedSessions :+ preSession
 
-    sessions.sortBy(_.stime).toIterable
+    ajustedSessions.sortBy(m => m.stime).toIterable
 
   }
 
@@ -262,34 +283,46 @@ object MergeWifiSession {
     var mac: String = null
 
     logs.foreach( log => {
+      // extract ip info
       mac = log.MAC
       val time = log.time
       val code = log.code
-      val ip = log.payload
+      val ip = code match {
+        case WIFICode.UserAuth | WIFICode.UserRoam => {
+          val parts = log.payload.split(',')
+          val part_ip = parts(1)
+          if ( ! List("null", "0.0.0.0", "255.255.255.255").contains(part_ip))
+            part_ip
+          else
+            null
+        }
+        case WIFICode.IPAllocation | WIFICode.IPRecycle => log.payload
+        case _ => null
+      }
 
-      if ( code == WIFICode.IPAllocation ) {
-
-        if ( ! IPMap.contains(ip) )
-          IPMap.put(ip, List(time, time))
-        else {
-          val value = IPMap.get(ip).get
-          if ( time >= value(1) ) {
-            // update session ending time
-            IPMap.put(ip, List(value(0), time))
+      // create ip mapping
+      if (ip != null){
+        if ( code == WIFICode.IPAllocation ||
+              code == WIFICode.UserAuth ||
+              code == WIFICode.UserRoam) {
+          // start an IP allocation session with these msgs.
+          if ( ! IPMap.contains(ip) )
+            IPMap.put(ip, List(time, time))
+          else {
+            val value = IPMap.get(ip).get
+            if ( time >= value(1) ) {
+              // update session ending time
+              IPMap.put(ip, List(value(0), time))
+            }
+          }
+        } else if (code == WIFICode.IPRecycle) {
+          // terminate an IP allocation session with recycle msg.
+          if ( IPMap.contains(ip)) {
+            val value = IPMap.get(ip).get
+            sessions = sessions :+ IPSession(mac, value(0), time, ip)
+            IPMap.remove(ip)
           }
         }
-
-      } else if (code == WIFICode.IPRecycle) {
-
-        if ( IPMap.contains(ip)) {
-          val value = IPMap.get(ip).get
-          // recycle certain IP
-          sessions = sessions :+ IPSession(mac, value(0), time, ip)
-          IPMap.remove(ip)
-        } else {
-          // omit recycling messages without allocation first
-        }
-
       }
     })
 
@@ -325,6 +358,6 @@ object MergeWifiSession {
     if (preSession != null)
       ajustedSessions = ajustedSessions :+ preSession
 
-    ajustedSessions.toIterable
+    ajustedSessions.sortBy(m => m.stime).toIterable
   }
 }

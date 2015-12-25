@@ -12,4 +12,6 @@ libraryDependencies += "joda-time" % "joda-time" % "2.6"
 
 libraryDependencies += "org.apache.commons" % "commons-math3" % "3.5"
 
+libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.4"
+
 libraryDependencies += "org.yaml" % "snakeyaml" % "1.15"
