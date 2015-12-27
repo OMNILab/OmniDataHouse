@@ -1,4 +1,4 @@
-# WifiSyslog
+# WifiSyslogHTTP
 
 This repo contains updated Wifi HTTP traffic logs.
 

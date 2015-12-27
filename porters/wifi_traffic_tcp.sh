@@ -20,26 +20,45 @@ if [ ! -d $WIFI_TRAFFIC_PATH ]; then
 fi
 
 year=`date -d "yesterday" "+%Y"`
-month=`date -d "yesterday" "+%b"`
-month2=`date -d "yesterday" "+%m"`
+monthChr=`date -d "yesterday" "+%b"`
+monthDig=`date -d "yesterday" "+%m"`
 day=`date -d "yesterday" "+%d"`
 
-INPUT_PATH=$WIFI_TRAFFIC_PATH/$year$month/tcp/*_$day_$month_$year.out
+monthnames=(invalid Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)
+if [ XXOO$1 != "XXOO" ]; then
+    year=`echo $1 | cut -d "-" -f1`
+    monthDig=`echo $1 | cut -d "-" -f2`
+    monthChr=${monthnames[${monthDig}]}
+    day=`echo $1 | cut -d "-" -f3`
+fi
 
-OUTPUT_TCP=$HDFS_WIFI_TRAFFIC/TCP/$year$month2$day
-OUTPUT_TCP_NOCOMPLETE=$HDFS_WIFI_TRAFFIC/TCP_NOCOMPLETE/$year$month2$day
-OUTPUT_UDP=$HDFS_WIFI_TRAFFIC/UDP/$year$month2$day
+INPUT_PATH=$WIFI_TRAFFIC_PATH/${year}${monthDig}/tcp
+OUTPUT_TCP=$HDFS_WIFI_TRAFFIC/TCP/$year$monthDig$day
+OUTPUT_TCP_NOCOMPLETE=$HDFS_WIFI_TRAFFIC/TCP_NOCOMPLETE/$year$monthDig$day
+OUTPUT_UDP=$HDFS_WIFI_TRAFFIC/UDP/$year$monthDig$day
 
 # Decompress files WITHOUT further processing
-for file in `ls $INPUT_PATH`; do
+for ((i = 0; i < 24; i++)); do
+    hour=`printf "%02d" $i`
+    file=$INPUT_PATH/${hour}_00_${day}_${monthChr}_${year}.out
     echo $file
     rfname=${file%.*}
 
-    if ! hadoop fs -test -e $INPUT_TEMP/`basename $rfname`; then
-        gunzip -c $file | hadoop fs -put - $INPUT_TEMP/`basename $rfname`
+    if ! hadoop fs -test -e ${OUTPUT_TCP}/$hour; then
+         python wifi_traffic_tcp/unzip_tcp.py $file/log_tcp_complete.gz \
+	     | hadoop fs -put - ${OUTPUT_TCP}/$hour
     fi
-done
 
-clean_trash
+    if ! hadoop fs -test -e ${OUTPUT_TCP_NOCOMPLETE}/$hour; then
+         python wifi_traffic_tcp/unzip_tcp.py $file/log_tcp_nocomplete.gz \
+	     | hadoop fs -put - ${OUTPUT_TCP_NOCOMPLETE}/$hour
+    fi
+
+    if ! hadoop fs -test -e ${OUTPUT_UDP}/$hour; then
+         python wifi_traffic_tcp/unzip_tcp.py $file/log_udp_complete.gz \
+	     | hadoop fs -put - ${OUTPUT_UDP}/$hour
+    fi
+
+done
 
 exit 0;

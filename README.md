@@ -21,23 +21,6 @@ this process, other data sources may be involved to generate the new model. At t
 to add new data sources to Layer0 or Layer1.
 
 
-## Project structure
-
-* `etlers`: source code of ETL tools.
-
-* `deploy`: folder to dploy binary ETL tools referred by `porters`.
-
-* `porters`: automatic scripts to port a new repo periodically with ETL tools.
-
-* `repos`: documentation for each repo.
-
-* `global_config.sh`: global settings used by porters.
-
-* `workflow.sh`: global workflow to run periodically.
-
-* `README.md`: this file.
-
-
 ## Layer2 Repos
 
 * [WifiSyslogSession](https://github.com/OMNILab/OmniDataHouse/blob/master/repos/wifi_syslog_session.md)
@@ -53,7 +36,26 @@ to add new data sources to Layer0 or Layer1.
 
 * [WifiTrafficHTTP](https://github.com/OMNILab/OmniDataHouse/blob/master/repos/wifi_traffic_http.md)
 
+* [WifiTrafficTCP](https://github.com/OMNILab/OmniDataHouse/blob/master/repos/wifi_traffic_tcp.md)
+
+* [WifiTrafficUDP](https://github.com/OMNILab/OmniDataHouse/blob/master/repos/wifi_traffic_udp.md)
+
 * [WifiUsers](https://github.com/OMNILab/OmniDataHouse/blob/master/repos/wifi_users.md)
+
+
+## Project structure
+
+* `etlers`: source code of ETL tools.
+
+* `deploy`: folder to dploy binary ETL tools referred by `porters`.
+
+* `porters`: automatic scripts to port a new repo periodically with ETL tools.
+
+* `repos`: documentation for each repo.
+
+* `global_config.sh`: global settings used by porters.
+
+* `workflow.sh`: global workflow to run periodically.
 
 
 ## Instructions to add a new repo.

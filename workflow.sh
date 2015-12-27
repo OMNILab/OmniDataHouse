@@ -25,3 +25,7 @@ $BASEDIR/porters/wifi_syslog_session.sh
 ## Run WifiTrafficHttp cleansing
 chmod +x $BASEDIR/porters/wifi_traffic_http.sh
 $BASEDIR/porters/wifi_traffic_http.sh
+
+## Run WifiTrafficTcp cleansing
+chmod +x $BASEDIR/porters/wifi_traffic_tcp.sh
+$BASEDIR/porters/wifi_traffic_tcp.sh
