@@ -1,6 +1,7 @@
 package cn.edu.sjtu.omnilab.odh.spark
 
 import cn.edu.sjtu.omnilab.odh.rawfilter.{APToBuilding, WIFICode}
+import cn.edu.sjtu.omnilab.odh.utils.Utils
 import org.apache.commons.lang.StringUtils
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.SparkContext._ // to use join etc.
@@ -67,7 +68,7 @@ object MergeWifiSession {
 
           CleanWIFILog(
             MAC = parts(0),
-            time = parts(1).toLong,
+            time = Utils.ISOToUnix(parts(1)),
             code = parts(2).toInt,
             payload = parts(3)
           )
