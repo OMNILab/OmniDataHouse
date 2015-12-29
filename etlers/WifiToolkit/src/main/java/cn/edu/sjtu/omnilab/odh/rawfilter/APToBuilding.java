@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Given a AP name string, this function return the description of the building.
@@ -27,26 +29,33 @@ public class APToBuilding {
 	private static final String AP_BUILDING_DATABASE = "/apnames-utf8.yaml";
 	private Map<String, Map<String, String>> APNameDB;
 	private boolean full_apname = true;
-	private Map<String, String> APBN_RealBN_Cache = new HashMap<String, String>();
+	private Map<String, String> ApbnCache = new HashMap<String, String>();
+    private final Pattern studorm = Pattern.compile("([DXEWSN]\\d+)-student|student-?([DXEWSN]\\d+)", Pattern.CASE_INSENSITIVE);
+
 
 	public APToBuilding(){
 		this(APToBuilding.class.getResourceAsStream(AP_BUILDING_DATABASE), true);
 	}
 
+
 	public APToBuilding(boolean full_apname){
 		this(APToBuilding.class.getResourceAsStream(AP_BUILDING_DATABASE), full_apname);
 	}
 
+
 	@SuppressWarnings("unchecked")
 	public APToBuilding(InputStream APDBYAML, boolean full_apname) {
 		this.full_apname = full_apname;
-
-		// Load yaml database
 		Yaml yaml = new Yaml(new SafeConstructor());
 		Map<String,Object> regexConfig = (Map<String,Object>) yaml.load(APDBYAML);
 	    APNameDB = (Map<String, Map<String, String>>) regexConfig.get("apprefix_sjtu");
 	}
 
+
+    /**
+     * Convert a full AP name into bulding info.
+     * @param APName The full AP name from WiFi syslog.
+     */
 	public List<String> parse(String APName){
 		List<String> result = null;
 
@@ -55,54 +64,76 @@ public class APToBuilding {
 		
 		if ( full_apname )  { // Given full AP name string
 			String[] parts = APName.split("-\\d+F-", 2);
-			String buildName = parts[0];
+			String namestr = parts[0];
 
 			// Remove MH- prefix
-			if (buildName.startsWith("MH-"))
-				buildName = buildName.substring(3, buildName.length());
+			if (namestr.startsWith("MH-"))
+				namestr = namestr.substring(3, namestr.length());
 
-			// Check cache first
-			if ( APBN_RealBN_Cache.containsKey(buildName) ) { // Cache hit
-				String cacheRealBN = APBN_RealBN_Cache.get(buildName);
-				result = getBuildInfo(cacheRealBN);
+			// Caching the mapping between extracted string and real building name
+			if ( ApbnCache.containsKey(namestr) ) {
+
+			    // Cache hit
+				String cachehit = ApbnCache.get(namestr);
+				result = getBuildInfo(cachehit);
+
 			} else {
 
+                // Handle student dorms
+                Matcher matcher = studorm.matcher(namestr);
+                if (matcher.find()) {
+                    namestr = String.format("student-%s",
+                            matcher.group(1)==null ? matcher.group(2) : matcher.group(1));
+                }
+
 			    // Cache miss
-				if ( APNameDB.containsKey(buildName)) {
-					result = getBuildInfo(buildName);
-					APBN_RealBN_Cache.put(buildName, buildName);
+				if ( APNameDB.containsKey(namestr)) {
+					result = getBuildInfo(namestr);
+					ApbnCache.put(namestr, namestr);
 				} else {
 					// Worst case; try to find its longest matched building name
-					String realBuildName = null;
-
-					for ( String BN : APNameDB.keySet())
-						if ( buildName.contains(BN) )
-							if ( realBuildName == null )
-								realBuildName = BN;
-							else if ( BN.length() > realBuildName.length() )
-								realBuildName = BN; // Get the longest match
-
-					if ( realBuildName != null ){
-						result = getBuildInfo(realBuildName);
-						// Cache the real building name
-						APBN_RealBN_Cache.put(buildName, realBuildName);
-					}
+                    String rname = longestMatch(namestr);
+                    if ( rname != null ){
+                        result = getBuildInfo(rname);
+                        ApbnCache.put(namestr, rname);
+                    }
 				}
 			}
-		} else { // Given build name, skip cache actions
-
+		} else {
 			if ( APNameDB.containsKey(APName) ) // Have item
 				result = getBuildInfo(APName);
-
 		}
 
 		return result;
 	}
-	
-	private List<String> getBuildInfo(String realBuildName){
+
+
+    /**
+     * Find the name string in database via longest substring matching.
+     * @param namestr The building name extracted from AP string.
+     */
+    private String longestMatch(String namestr) {
+        String rname = null;
+
+        for ( String bname : APNameDB.keySet())
+            if ( namestr.contains(bname) )
+                if ( rname == null )
+                    rname = bname;
+                else if ( bname.length() > rname.length() )
+                    rname = bname; // Get the longest match
+
+        return rname;
+    }
+
+
+    /**
+     * Format building info. into string list.
+     * @param rname The real building name in database;
+     */
+	private List<String> getBuildInfo(String rname){
 
 		List info = new LinkedList<String>();
-		Map<String, String> buildInfo = APNameDB.get(realBuildName);
+		Map<String, String> buildInfo = APNameDB.get(rname);
 
 		info.add(buildInfo.get("name"));
 		info.add(buildInfo.get("type"));

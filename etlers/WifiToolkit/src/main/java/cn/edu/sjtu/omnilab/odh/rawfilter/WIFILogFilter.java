@@ -34,8 +34,20 @@ import java.util.regex.Pattern;
  * We also lost year in time for most months of 2013.
  * This requires fix in the pattern matching.
  *
+ * Output content: UserMAC, Timestamp, MsgType, Payload
+ * The payload takes different content for different msgtypes:
+ * MsgType  Payload
+ * 0        apname
+ * 1        apname
+ * 2        apname
+ * 3        apname
+ * 4        username, userip, apname
+ * 5        userip
+ * 6        userip
+ * 7        apname, userip
+ * 8        apname
  *
- * @Author chenxm, gwj
+ * @Author chenxm
  */
 public class WIFILogFilter {
 

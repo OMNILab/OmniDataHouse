@@ -45,17 +45,17 @@ for ((i = 0; i < 24; i++)); do
     rfname=${file%.*}
 
     if ! hadoop fs -test -e ${OUTPUT_TCP}/$hour; then
-         python wifi_traffic_tcp/unzip_tcp.py $file/log_tcp_complete.gz \
+         python $BASEDIR/porters/wifi_traffic_tcp/unzip_tcp.py $file/log_tcp_complete.gz \
 	     | hadoop fs -put - ${OUTPUT_TCP}/$hour
     fi
 
     if ! hadoop fs -test -e ${OUTPUT_TCP_NOCOMPLETE}/$hour; then
-         python wifi_traffic_tcp/unzip_tcp.py $file/log_tcp_nocomplete.gz \
+         python $BASEDIR/porters/wifi_traffic_tcp/unzip_tcp.py $file/log_tcp_nocomplete.gz \
 	     | hadoop fs -put - ${OUTPUT_TCP_NOCOMPLETE}/$hour
     fi
 
     if ! hadoop fs -test -e ${OUTPUT_UDP}/$hour; then
-         python wifi_traffic_tcp/unzip_tcp.py $file/log_udp_complete.gz \
+         python $BASEDIR/porters/wifi_traffic_tcp/unzip_tcp.py $file/log_udp_complete.gz \
 	     | hadoop fs -put - ${OUTPUT_UDP}/$hour
     fi
 
